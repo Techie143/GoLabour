@@ -1,0 +1,83 @@
+create database golabour;
+
+use golabour;
+
+create table category(
+ categoryID int AUTO_INCREMENT NOT NULL,
+ categoryName varchar(40) NOT NULL,
+ PRIMARY KEY (categoryID)
+);
+
+CREATE TABLE user(  
+   email varchar(50) NOT NULL,
+   password varchar(30) NOT NULL,	   
+   name varchar(50) NOT NULL,   
+   mobile bigint NOT NULL,
+   age int(3),
+   gender varchar(6),  
+   PRIMARY KEY ( email )  
+);
+
+CREATE TABLE labour(
+   mobile bigint NOT NULL,
+   password varchar(30) NOT NULL,	   
+   name varchar(50) NOT NULL,   
+   age int(3),
+   gender varchar(6),  
+   PRIMARY KEY ( mobile )  
+); 
+
+Create table uaddress(
+  id int AUTO_INCREMENT NOt null primary key,
+  email varchar(50),
+  house varchar(30) NOT NULL,
+  area varchar(30) NOT NULL,
+  pincode varchar(20) NOT NULL,
+  city varchar(20) NOT NULL
+);
+
+Create table laddress(
+  id int AUTO_INCREMENT NOt null primary key,
+  mobile bigint,  
+  house varchar(30) NOT NULL,
+  area varchar(30) NOT NULL,
+  pincode varchar(20) NOT NULL,
+  city varchar(20) NOT NULL
+);
+
+create table job(
+ job_id int AUTO_INCREMENT NOT NULL,
+ email varchar(50),
+ categoryID int NOT NULL,
+ description text(5000) NOT NULL,
+ date DATE,
+ PRIMARY KEY ( job_id )  
+);
+
+create table field(
+ field_id int AUTO_INCREMENT NOT NULL,
+ mobile bigint,
+ categoryID int NOT NULL,
+ workTime enum ('Part-Time' , 'Full-Time'),
+ PRIMARY KEY ( field_id )
+);
+  
+create table notification(
+ job_id int,
+ mobile bigint,
+ status enum ('True', 'False') 
+);
+
+ALTER table uaddress ADD CONSTRAINT fk_uaddress FOREIGN KEY (email) REFERENCES user(email);
+
+ALTER table job ADD CONSTRAINT fk_job FOREIGN KEY (email) REFERENCES user(email);
+
+alter table laddress add constraint fk_laddress foreign key (mobile) references labour(mobile); 
+
+alter table field add constraint fk_field_mobile foreign key (mobile) references labour(mobile);
+
+alter table field add constraint fk_field_catid foreign key (categoryID) references category(categoryID);
+
+alter table notification add constraint fk_not_mob foreign key (mobile) references labour(mobile); 
+
+alter table notification add constraint fk_not_job foreign key (job_id) references job(job_id); 

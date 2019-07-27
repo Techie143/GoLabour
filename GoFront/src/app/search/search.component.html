@@ -1,0 +1,48 @@
+<!-- <div class="container border border-dark rounded">
+    <h5 class="mt-5">Search a Labour</h5>
+    <hr/>
+    <div class="row">
+        <div class="col-sm-8">
+            <mat-form-field>
+                <mat-label>Skills Needed</mat-label>
+                <mat-select [(ngModel)]="selectedCategory" name="category">
+                    <mat-option *ngFor="let category of categories" [value]="category.value">
+                        {{category.value}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col-sm-4">
+            <span class="ml-5 pt-5"><button mat-raised-button color="primary" (click)="goSearch()">Search</button></span>
+        </div>
+    </div>
+    &nbsp; &nbsp; -->
+    <div *ngIf="check" class="table-responsive">
+        <h5>Search Results</h5>
+        <table class="table table-bordered" *ngIf="results.length != 0;else error">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Work Time</th>
+                    <th>Cost</th>
+                    <th>View</th>
+                    <th>Notify</th>
+                </tr>
+            </thead>
+            <tbody *ngFor="let result of results; index as i">
+                <tr>
+                    <td>{{i+1}}</td>
+                    <td>{{result.name}}</td>
+                    <td>{{result.work}}</td>
+                    <td>{{result.price}}</td>
+                    <td><a (click)="openView(i)">View</a></td>
+                    <td><a (click)="goNotify(i)">Notify</a></td>
+                </tr>
+            </tbody>
+        </table>
+        <ng-template #error>
+            <h6 style="color: red">Sorry, there are no availables.</h6>
+        </ng-template>
+    </div>
+<!-- </div> -->

@@ -1,0 +1,223 @@
+<div class="container">
+    <span class="pb-2">
+        <img src="./assets/icons/home.png" alt=""> / {{option}}
+    </span>
+    <div class="row">
+        <div class="col-sm-3 border border-dark bg-color">
+            <mat-list>
+                <a (click)="account()">
+                    <mat-list-item>MyAccount</mat-list-item>
+                </a>
+                <mat-divider></mat-divider>
+                <a (click)="addAddress()">
+                    <mat-list-item>Add Address</mat-list-item>
+                </a>
+                <mat-divider></mat-divider>
+                <a (click)="addJob()">
+                    <mat-list-item>Job Description</mat-list-item>
+                </a>
+                <mat-divider></mat-divider>
+                <a (click)="addAlerts()">
+                    <mat-list-item>Alerts</mat-list-item>
+                </a>
+            </mat-list>
+        </div>
+        <div class="col-sm-9 border border-dark bg-color ml-2 col-min-width">
+            <ng-template [ngIf]="option == 'My Account'">
+                <div class="container-template">
+                    <form>
+                        <span class="size-increase">
+                            <img src="./assets/icons/user.png" alt="">
+                        </span>
+                        <span class="fill-space"><button mat-raised-button color="primary" (click)="editDetail()">
+                            <mat-icon>edit</mat-icon>Edit</button>
+                        </span>
+                        <mat-form-field class="example-full-width">
+                            <input matInput [(ngModel)]="username" name="Username" placeholder="Name" readonly>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <input matInput [(ngModel)]="mobile" name="Mobile" placeholder="Mobile Number" readonly>
+                        </mat-form-field>
+                        <mat-form-field class="example-full-width">
+                            <input matInput [(ngModel)]="email" name="E-Mail" placeholder="E-Mail" readonly>
+                        </mat-form-field>
+                    </form>
+                </div>
+            </ng-template>
+            <ng-template [ngIf]="option == 'Edit Profile'">
+                <form [formGroup]="editProfile" class="container-template" (ngSubmit)="updateChanges()">
+                    <h3>Edit Profile</h3>
+                    <mat-divider></mat-divider>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Full Name" formControlName="name">
+                        <mat-error *ngIf="editProfile.get('name').hasError('required')">Name is Required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Email" formControlName="email">
+                        <mat-error *ngIf="editProfile.get('email').invalid">{{getErrorMessage()}}</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Mobile" formControlName="mobile">
+                        <mat-error *ngIf="editProfile.get('mobile').hasError('required') || editProfile.get('mobile').hasError('minlength') || editProfile.get('mobile').hasError('maxlength')">Enter a valid number</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Age" formControlName="age">
+                        <mat-error *ngIf="editProfile.get('age').hasError('required')">Enter a valid number</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Gender</mat-label>
+                        <select matNativeControl formControlName="gender">
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                            </select>
+                        <mat-error *ngIf="editProfile.get('gender').hasError('required')">Choose One Gender</mat-error>
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="editProfile?.invalid">Update Changes</button>
+                    <button mat-raised-button color="primary" (click)="onClose()">Cancel</button>
+                    <button mat-raised-button color="primary" (click)="changePassword()">Change Password</button>
+                </form>
+            </ng-template>
+            <ng-template [ngIf]="option == 'Change Password'">
+                <form [formGroup]="password" (ngSubmit)="updatePassword()" class="container-template">
+                    <h3>Change Password</h3>
+                    <mat-divider></mat-divider>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Old Password" formControlName="old" type="password">
+                        <mat-error *ngIf="password.get('old').hasError('required')">Old Password is required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="New Password" formControlName="new" type="password">
+                        <mat-error *ngIf="password.get('new').hasError('required')">New Password is required</mat-error>
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="password?.invalid">Update Password</button>
+                    <button mat-raised-button color="primary" (click)="onClose1()">Cancel</button>
+                </form>
+            </ng-template>
+            <ng-template [ngIf]="option == 'Job Description'">
+                <div class="container-template">
+                    <span class="fill-space">
+                        <button mat-raised-button color="primary" (click)="createJob()">Create</button>
+                    </span>
+                    <div class="table-responsive">
+                        <h5>Your Added Jobs</h5>
+                        <mat-divider></mat-divider>
+                        <table class="table table-bordered" *ngIf="jobs.length != 0;else error">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Date</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let job of jobs; index as i">
+                                <tr>
+                                    <td>{{i+1}}</td>
+                                    <td>{{job.category}}</td>
+                                    <td>{{job.description}}</td>
+                                    <td>{{job.date}}</td>
+                                    <td><a (click)="delete(description)">Delete</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <ng-template #error>
+                            <h6 style="color: red">Sorry, there are no availables.</h6>
+                        </ng-template>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template [ngIf]="option == 'Create Job'">
+                <form [formGroup]="createdJob" (ngSubmit)="updateJob()" class="container-template">
+                    <h3>Create Job</h3>
+                    <mat-divider></mat-divider>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Category</mat-label>
+                        <mat-select matNativeControl formControlName="selectedCategory">
+                            <mat-option *ngFor="let category of categories" [value]="category">
+                                {{category}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="createdJob.get('selectedCategory').hasError('required')">Select one category</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Preferred Date</mat-label>
+                        <div class="input-group">
+                            <input matInput class="form-control" placeholder="yyyy-mm-dd" formControlName="selectedDate" ngbDatepicker #d="ngbDatepicker">
+                            <div class="input-group-append">
+                                <button mat-button class="btn btn-outline-secondary" (click)="d.toggle()" type="button"><mat-icon>calendar_today</mat-icon></button>
+                            </div>
+                        </div>
+                        <mat-error *ngIf="createdJob.get('selectedDate').hasError('required')">Select a Date</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <textarea matInput placeholder="Enter Job Description" formControlName="description"></textarea>
+                        <mat-error *ngIf="createdJob.get('description').hasError('required')">Enter a Description</mat-error>
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="createdJob?.invalid">Create Job</button>
+                    <button mat-raised-button color="primary" (click)="onClose2()">Cancel</button>
+                </form>
+            </ng-template>
+            <ng-template [ngIf]="option == 'Address'">
+                <div class="container-template">
+                    <span class="fill-space">
+                                <button mat-raised-button color="primary" (click)="addNewAddress()">Add Address</button>
+                            </span>
+                    <div class="table-responsive">
+                        <h5>Your Added Address</h5>
+                        <mat-divider></mat-divider>
+                        <table class="table table-bordered" *ngIf="address.length != 0;else error1">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>House</th>
+                                    <th>Area/Street</th>
+                                    <th>Pincode</th>
+                                    <th>City</th>
+                                    <th>Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody *ngFor="let result of address; index as i">
+                                <tr>
+                                    <td>{{i+1}}</td>
+                                    <td>{{result.house}}</td>
+                                    <td>{{result.area}}</td>
+                                    <td>{{result.pincode}}</td>
+                                    <td>{{result.city}}</td>
+                                    <td><a (click)="remove(result.house)">Remove</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <ng-template #error1>
+                            <h6 style="color: red">Sorry, there are no availables.</h6>
+                        </ng-template>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template [ngIf]="option == 'Add New Address'">
+                <form [formGroup]="newAddress" class="container-template" (ngSubmit)="UpdateAddress()">
+                    <h3>Add Address</h3>
+                    <mat-divider></mat-divider>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="House No." formControlName="house">
+                        <mat-error *ngIf="newAddress.get('house').hasError('required')">House No. is Required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Area/Street" formControlName="area">
+                        <mat-error *ngIf="newAddress.get('area').hasError('required')">Area is required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="Pincode" formControlName="pincode">
+                        <mat-error *ngIf="newAddress.get('pincode').hasError('required')">Enter a PinCode</mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="example-full-width">
+                        <input matInput placeholder="City" formControlName="city">
+                        <mat-error *ngIf="newAddress.get('city').hasError('required')">City is Required</mat-error>
+                    </mat-form-field>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="newAddress?.invalid">Add Address</button>
+                    <button mat-raised-button color="primary" (click)="onClose3()">Cancel</button>
+                </form>
+            </ng-template>
+        </div>
+    </div>
+</div>

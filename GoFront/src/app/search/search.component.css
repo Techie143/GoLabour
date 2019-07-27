@@ -1,0 +1,12 @@
+.table a {
+    color: blue;
+    cursor: pointer;
+}
+
+.table a:hover {
+    color: red;
+}
+
+mat-form-field {
+    display: block;
+}

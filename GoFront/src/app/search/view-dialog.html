@@ -1,0 +1,30 @@
+<div mat-dialog-title>
+    <b>View Details</b>
+    <span style="float: right;"><button mat-button (click)="onClick()"><i class="material-icons">close</i></button></span>
+</div>
+<div mat-dialog-content>
+    <mat-form-field style="display : block">
+        <input matInput placeholder="Name" [(ngModel)]="name" disabled>
+    </mat-form-field>
+    <mat-form-field style="display : block">
+        <input matInput placeholder="Email" [(ngModel)]="email" disabled>
+    </mat-form-field>
+    <mat-form-field style=" display : block ">
+        <input matInput placeholder="Mobile Number" [(ngModel)]="mobile" disabled>
+    </mat-form-field>
+    <mat-form-field style=" display : block ">
+        <input matInput placeholder="Aadhaar Card" [(ngModel)]="aadhaar" disabled>
+    </mat-form-field>
+    <mat-form-field style=" display : block ">
+        <input matInput placeholder="Skill" [(ngModel)]="skill" disabled>
+    </mat-form-field>
+    <mat-form-field style=" display : block ">
+        <input matInput placeholder="Work" [(ngModel)]="work" disabled>
+    </mat-form-field>
+    <mat-form-field style=" display : block ">
+        <input matInput placeholder="Price" [(ngModel)]="price" disabled>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="goNotify()">Notify</button>
+</div>
